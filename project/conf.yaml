@@ -1,0 +1,35 @@
+log:
+  level: debug
+  console: true
+
+app:
+  ip:
+  port: 80
+  doc: 
+    enable: true
+    account: abc
+    password: abc
+
+mysql:
+  migrate:
+    enable: true
+  dsn:
+    masters:
+      - root:root@tcp(mysql:3306)/mydb?charset=utf8mb4
+    slaves:
+      - root:root@tcp(mysql:3306)/mydb?charset=utf8mb4
+
+redis:
+  # cluster:
+  #   adds:
+  # sentinel:
+  #   masterName:
+  #   sentinelAddrs:
+  client:
+    addr:
+      - redis:6379
+
+jwt:
+  secret: a very strong jwt secret ^_^
+  exp: 86400
+  issuer:

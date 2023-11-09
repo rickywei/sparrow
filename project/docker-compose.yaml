@@ -1,0 +1,69 @@
+version: "3.0"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    # volumes:
+    #   - ./log:/app/log
+    ports:
+      - "8000:80"
+      # - "8001:8001"
+    depends_on:
+      - mysql
+      - redis
+      # - prometheus
+      # - grafana
+    networks:
+      - net
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    volumes:
+      - ./po/sql/:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3306:3306
+    networks:
+      - net
+    restart: always
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - net
+    restart: always
+
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: prometheus
+  #   ports:
+  #     - 9090:9090
+  #   networks:
+  #     - net
+  #   restart: always
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   ports:
+  #     - 3000:3000
+  #   networks:
+  #     - net
+  #   restart: always
+
+networks:
+  net:
+    driver: bridge
